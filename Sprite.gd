@@ -15,12 +15,11 @@ func _ready():
 	target_direction = direction
 	change_interval = rand_range(3, 5)
 	
-	
 	noise = FastNoiseLite.new()
 	noise.seed = randi()
 	noise.frequency = 0.1
 
-	var area2d = $Amoeba_Area 
+	var area2d = $Amoeba_Area
 	if area2d:
 		print("Amoeba_Area node found, connecting signal on node: ", self.name)
 		area2d.connect("area_entered", Callable(self, "_on_Amoeba_Area_area_entered"))
@@ -62,11 +61,14 @@ func _process(delta):
 		target_direction.y *= -1
 
 func _on_Amoeba_Area_area_entered(area):
-	print("Area entered detected.")
+	print("Area entered detected with groups: ", area.get_groups())
 	if area.is_in_group("bacteria"):
-		print("Bacteria detected!")
-		area.queue_free()  
+		print("Bacteria detected! Queueing for deletion: ", area.name, " with parent: ", area.get_parent().name)
+		area.call_deferred("queue_free")
+		print("Bacteria queued for deletion: ", area.name, " with parent: ", area.get_parent().name)
 		scale += Vector2(0.1, 0.1)
+	else:
+		print("The area entered is not a bacteria")
 
 func rand_range(min, max):
 	return min + (max - min) * randf()
