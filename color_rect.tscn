@@ -1,16 +1,23 @@
-[gd_scene load_steps=6 format=3 uid="uid://cs8k1yij53gh6"]
+[gd_scene load_steps=8 format=3 uid="uid://cs8k1yij53gh6"]
 
 [ext_resource type="Texture2D" uid="uid://cuibcawodeb6h" path="res://Background.jpg" id="1_w5grp"]
 [ext_resource type="Texture2D" uid="uid://d04vcir1p10m0" path="res://amoeba.png" id="2_smd3q"]
 [ext_resource type="Script" path="res://Sprite.gd" id="3_wu3pq"]
 [ext_resource type="Texture2D" uid="uid://bd27ereq1lsel" path="res://bacteria.png" id="4_w4caa"]
+[ext_resource type="Script" path="res://Food.gd" id="5_lg2pp"]
 
-[sub_resource type="CircleShape2D" id="CircleShape2D_2xjiy"]
-radius = 201.002
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_jh6jy"]
+radius = 76.0
+height = 223.185
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_djxhf"]
+radius = 333.507
 
 [node name="ColorRect" type="ColorRect"]
-offset_right = 1151.0
-offset_bottom = 648.0
+offset_left = 10.0
+offset_top = 8.0
+offset_right = 1161.0
+offset_bottom = 656.0
 
 [node name="Background" type="Sprite2D" parent="."]
 position = Vector2(574, 328.5)
@@ -18,17 +25,32 @@ scale = Vector2(0.192, 0.159403)
 texture = ExtResource("1_w5grp")
 metadata/_edit_lock_ = true
 
-[node name="Amoeba" type="Sprite2D" parent="Background"]
-z_index = 999
+[node name="Amobea" type="Sprite2D" parent="." groups=["Amobea"]]
+position = Vector2(303, 303)
+scale = Vector2(0.25, 0.25)
 texture = ExtResource("2_smd3q")
 script = ExtResource("3_wu3pq")
 
-[node name="Food" type="Sprite2D" parent="."]
-position = Vector2(438, 397)
-scale = Vector2(0.102, 0.11)
-texture = ExtResource("4_w4caa")
+[node name="Amoeba_Area" type="Area2D" parent="Amobea" groups=["Amobea"]]
+position = Vector2(-28, -4)
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Food"]
-z_index = 1
-position = Vector2(-19.6077, -9.09094)
-shape = SubResource("CircleShape2D_2xjiy")
+[node name="Amobea_Collision" type="CollisionShape2D" parent="Amobea/Amoeba_Area" groups=["Amobea"]]
+position = Vector2(20, 8)
+rotation = 0.837758
+scale = Vector2(1.5, 1.5)
+shape = SubResource("CapsuleShape2D_jh6jy")
+metadata/_edit_lock_ = true
+
+[node name="Bacteria" type="Sprite2D" parent="." groups=["Bacteria"]]
+position = Vector2(646, 195)
+scale = Vector2(0.15, 0.15)
+texture = ExtResource("4_w4caa")
+script = ExtResource("5_lg2pp")
+
+[node name="Bacteria_Area" type="Area2D" parent="Bacteria" groups=["Bacteria"]]
+
+[node name="Bacteria_Collision" type="CollisionShape2D" parent="Bacteria/Bacteria_Area" groups=["Bacteria"]]
+position = Vector2(6.66667, 0)
+scale = Vector2(0.62, 0.62)
+shape = SubResource("CircleShape2D_djxhf")
+metadata/_edit_lock_ = true
