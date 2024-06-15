@@ -1,0 +1,34 @@
+[gd_scene load_steps=6 format=3 uid="uid://cs8k1yij53gh6"]
+
+[ext_resource type="Texture2D" uid="uid://cuibcawodeb6h" path="res://Background.jpg" id="1_w5grp"]
+[ext_resource type="Texture2D" uid="uid://d04vcir1p10m0" path="res://amoeba.png" id="2_smd3q"]
+[ext_resource type="Script" path="res://Sprite.gd" id="3_wu3pq"]
+[ext_resource type="Texture2D" uid="uid://bd27ereq1lsel" path="res://bacteria.png" id="4_w4caa"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_2xjiy"]
+radius = 201.002
+
+[node name="ColorRect" type="ColorRect"]
+offset_right = 1151.0
+offset_bottom = 648.0
+
+[node name="Background" type="Sprite2D" parent="."]
+position = Vector2(574, 328.5)
+scale = Vector2(0.192, 0.159403)
+texture = ExtResource("1_w5grp")
+metadata/_edit_lock_ = true
+
+[node name="Amoeba" type="Sprite2D" parent="Background"]
+z_index = 999
+texture = ExtResource("2_smd3q")
+script = ExtResource("3_wu3pq")
+
+[node name="Food" type="Sprite2D" parent="."]
+position = Vector2(438, 397)
+scale = Vector2(0.102, 0.11)
+texture = ExtResource("4_w4caa")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Food"]
+z_index = 1
+position = Vector2(-19.6077, -9.09094)
+shape = SubResource("CircleShape2D_2xjiy")
