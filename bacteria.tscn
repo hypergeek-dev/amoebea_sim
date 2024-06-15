@@ -1,0 +1,23 @@
+[gd_scene load_steps=3 format=3 uid="uid://cjk6i5kmlcugk"]
+
+[ext_resource type="Texture2D" uid="uid://bd27ereq1lsel" path="res://bacteria.png" id="1_7aj02"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_f56yr"]
+radius = 207.022
+
+[node name="Bacteria" type="Node2D" groups=["bacteria"]]
+position = Vector2(493, 192)
+
+[node name="Bacteria_Area" type="Area2D" parent="." groups=["bacteria"]]
+position = Vector2(74, 25)
+
+[node name="Bacteria_Collision" type="CollisionShape2D" parent="Bacteria_Area" groups=["bacteria"]]
+position = Vector2(-3, 1)
+scale = Vector2(0.175, 0.175)
+shape = SubResource("CircleShape2D_f56yr")
+metadata/_edit_lock_ = true
+
+[node name="Sprite" type="Sprite2D" parent="Bacteria_Area" groups=["bacteria"]]
+position = Vector2(-2.99997, -7.62939e-06)
+scale = Vector2(0.175, 0.175)
+texture = ExtResource("1_7aj02")

@@ -1,9 +1,9 @@
 extends Sprite2D
 
-var speed = 300
+var speed = 150
 var direction = Vector2.ZERO
 var target_direction = Vector2.ZERO
-var change_interval = 5.0
+var change_interval = 2.0
 var time_since_last_change = 0.0
 var noise
 var noise_time = 0.0
@@ -13,7 +13,7 @@ func _ready():
 	randomize()
 	direction = Vector2(rand_range(-1, 1), rand_range(-1, 1)).normalized()
 	target_direction = direction
-	change_interval = rand_range(3, 5)
+	change_interval = rand_range(1, 3)
 	
 	noise = FastNoiseLite.new()
 	noise.seed = randi()
@@ -27,38 +27,41 @@ func _ready():
 		print("Error: Amoeba_Area node not found on node: ", self.name)
 
 func _process(delta):
-	position += direction * speed * delta
-	direction = direction.lerp(target_direction, 0.02)
-
-	time_since_last_change += delta
 	noise_time += delta
+	direction.x = noise.get_noise_2d(noise_time, 0)
+	direction.y = noise.get_noise_2d(0, noise_time)
+	direction = direction.normalized()
 
-	if time_since_last_change >= change_interval:
-		var noise_value_x = noise.get_noise_2d(position.x * 0.1, noise_time)
-		var noise_value_y = noise.get_noise_2d(position.y * 0.1, noise_time)
-		target_direction = Vector2(noise_value_x, noise_value_y).normalized()
-		
-		time_since_last_change = 0.0
-		change_interval = rand_range(3, 5)
+	position += direction * speed * delta
 
 	var screen_size = get_viewport_rect().size
+
+	# Change direction if close to edges
+	if position.x < 50 or position.x > screen_size.x - 50:
+		direction.x *= -1
+		target_direction.x = rand_range(-1, 1)
+		time_since_last_change = 0.0
+	if position.y < 50 or position.y > screen_size.y - 50:
+		direction.y *= -1
+		target_direction.y = rand_range(-1, 1)
+		time_since_last_change = 0.0
+
+	# Ensure amoeba doesn't get stuck in the corners
 	if position.x < 0:
 		position.x = 0
-		direction.x *= -1
-		target_direction.x *= -1
 	elif position.x > screen_size.x:
 		position.x = screen_size.x
-		direction.x *= -1
-		target_direction.x *= -1
 
 	if position.y < 0:
 		position.y = 0
-		direction.y *= -1
-		target_direction.y *= -1
 	elif position.y > screen_size.y:
 		position.y = screen_size.y
-		direction.y *= -1
-		target_direction.y *= -1
+
+	time_since_last_change += delta
+	if time_since_last_change >= change_interval:
+		target_direction = Vector2(rand_range(-1, 1), rand_range(-1, 1)).normalized()
+		time_since_last_change = 0.0
+		change_interval = rand_range(1, 3)
 
 func _on_Amoeba_Area_area_entered(area):
 	print("Area entered detected with groups: ", area.get_groups())
